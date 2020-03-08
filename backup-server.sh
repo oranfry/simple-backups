@@ -14,7 +14,7 @@ fi
 
 
 CLONE_HOME="/root/.clone/${host}"
-TAR_HOME="/home/${backup_owner}/backup/${host}"
+TAR_HOME="$(eval echo ~$backup_owner)/backup/${host}"
 
 if [ -e "${TAR_HOME}/processing" ]; then
 	echo "Cowardly refusing to run two backup processes at the same time" 1>&2
