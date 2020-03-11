@@ -1,6 +1,7 @@
 #!/bin/bash
 host=$1
 backup_owner=$2
+parent_dir=$3
 
 if [ "${host}" == "" ]; then
     echo no host given
@@ -12,9 +13,12 @@ if [ "${backup_owner}" == "" ]; then
     exit
 fi
 
+if [ "${parent_dir}" == "" ]; then
+    parent_dir="backup"
+fi
 
 CLONE_HOME="/root/.clone/${host}"
-TAR_HOME="$(eval echo ~$backup_owner)/backup/${host}"
+TAR_HOME="$(eval echo ~$backup_owner)/${parent_dir}/${host}"
 
 if [ -e "${TAR_HOME}/processing" ]; then
 	echo "Cowardly refusing to run two backup processes at the same time" 1>&2
