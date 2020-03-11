@@ -1,20 +1,36 @@
 #!/bin/bash
+gzip_flag=
+gzip_ext=
+parent_dir=backup
+backup_owner=root
+
+while getopts ":o:p:z" opt; do
+  case ${opt} in
+    o )
+      backup_owner=$OPTARG
+      ;;
+    p )
+      parent_dir=$OPTARG
+      ;;
+    z )
+      gzip_flag=z
+      gzip_ext=.gz
+      ;;
+    \? )
+      echo "Invalid option: $OPTARG" 1>&2
+      ;;
+    : )
+      echo "Invalid option: $OPTARG requires an argument" 1>&2
+      ;;
+  esac
+done
+shift $((OPTIND -1))
+
 host=$1
-backup_owner=$2
-parent_dir=$3
 
 if [ "${host}" == "" ]; then
     echo no host given
     exit
-fi
-
-if [ "${backup_owner}" == "" ]; then
-    echo no backup owner given
-    exit
-fi
-
-if [ "${parent_dir}" == "" ]; then
-    parent_dir="backup"
 fi
 
 CLONE_HOME="/root/.clone/${host}"
@@ -44,6 +60,6 @@ includes=$(cat "${TAR_HOME}/files.list" | while read f; do while [ "$f" != "/" ]
 cmd="/usr/bin/rsync --rsync-path='sudo rsync' -az --delete $includes '--exclude=*' ${host}:/ '${CLONE_HOME}'"
 eval $cmd
 
-(cd "${CLONE_HOME}" && /bin/tar -cf "/tmp/${host}.tar" * && chown $backup_owner:$backup_owner "/tmp/${host}.tar" && mv "/tmp/${host}.tar" "${TAR_HOME}/backup.tar")
+(cd "${CLONE_HOME}" && /bin/tar -cf${gzip_flag} "/tmp/${host}.tar" * && chown $backup_owner:$backup_owner "/tmp/${host}.tar" && mv "/tmp/${host}.tar" "${TAR_HOME}/backup.tar${gzip_ext}")
 
 rm "${TAR_HOME}/processing"
