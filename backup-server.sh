@@ -78,7 +78,7 @@ fi
 
 set -o noglob
 includesrel=$(cat "${TAR_HOME}/files.list" | while read f; do while [ "$f" != "/" ]; do echo "$f"; f="$(dirname "$f")"; done; done | sort | uniq | while read f; do echo " '--include=$(echo $f | sed 's,^/,,')'"; done)
-cmd="/usr/bin/rsync -a --delete $includesrel '--exclude=*' '${CLONE_HOME}/' '${CLONE_HOME}.new'"
+cmd="/usr/bin/rsync -a --remove-source-files $includesrel '--exclude=*' '${CLONE_HOME}/' '${CLONE_HOME}.new'"
 set +o noglob
 
 test -n "$verbose" && echo -e "Pruning cache based on file patterns...\n$cmd\n"
