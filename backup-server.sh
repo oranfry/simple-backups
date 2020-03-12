@@ -4,6 +4,7 @@ gzip_ext=
 save_space=
 parent_dir=backup
 backup_owner=root
+tar_opts=
 invalid=
 
 while getopts ":o:p:zs" opt; do
@@ -20,6 +21,7 @@ while getopts ":o:p:zs" opt; do
       ;;
     s )
       save_space=1
+      tar_opts="--remove-files"
       ;;
     \? )
       echo "Invalid option: $OPTARG" 1>&2
@@ -77,7 +79,7 @@ eval $cmd
 
 rm -f "${TAR_HOME}/backup.tar${gzip_ext}" # frees up space for the new archive
 
-(cd "${CLONE_HOME}" && /bin/tar -cf${gzip_flag} "/tmp/${host}.tar${gzip_ext}" * && chown $backup_owner:$backup_owner "/tmp/${host}.tar${gzip_ext}" && mv "/tmp/${host}.tar${gzip_ext}" "${TAR_HOME}/backup.tar${gzip_ext}")
+(cd "${CLONE_HOME}" && /bin/tar ${tar_opts} -cf${gzip_flag} "/tmp/${host}.tar${gzip_ext}" * && chown $backup_owner:$backup_owner "/tmp/${host}.tar${gzip_ext}" && mv "/tmp/${host}.tar${gzip_ext}" "${TAR_HOME}/backup.tar${gzip_ext}")
 
 if [ -n "${save_space}" -a -s "${TAR_HOME}/backup.tar${gzip_ext}" ]; then
   rm -rf "${CLONE_HOME}"
