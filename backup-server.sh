@@ -1,4 +1,5 @@
 #!/bin/bash
+
 gzip_flag=
 gzip_ext=
 save_space=
@@ -75,8 +76,10 @@ if [ -n "${save_space}" -a -s "${TAR_FILE}" ]; then
   rm -rf "${CLONE_HOME}" && mkdir "${CLONE_HOME}" && cd "${CLONE_HOME}" && /bin/tar -x${gzip_flag}f "${TAR_FILE}"
 fi
 
+set -o noglob
 includesrel=$(cat "${TAR_HOME}/files.list" | while read f; do while [ "$f" != "/" ]; do echo "$f"; f="$(dirname "$f")"; done; done | sort | uniq | while read f; do echo " '--include=$(echo $f | sed 's,^/,,')'"; done)
 cmd="/usr/bin/rsync -a --delete $includesrel '--exclude=*' '${CLONE_HOME}/' '${CLONE_HOME}.new'"
+set +o noglob
 
 test -n "$verbose" && echo -e "Pruning cache based on file patterns...\n$cmd\n"
 eval $cmd
@@ -84,8 +87,10 @@ eval $cmd
 rm -rf "${CLONE_HOME}"
 mv "${CLONE_HOME}.new" "${CLONE_HOME}"
 
+set -o noglob
 includes=$(cat "${TAR_HOME}/files.list" | while read f; do while [ "$f" != "/" ]; do echo "$f"; f="$(dirname "$f")"; done; done | sort | uniq | while read f; do echo " '--include=$f'"; done)
 cmd="/usr/bin/rsync --rsync-path='sudo rsync' -az --delete $includes '--exclude=*' ${host}:/ '${CLONE_HOME}'"
+set +o noglob
 
 test -n "$verbose" && echo -e "Rsync'ing with server...\n$cmd\n"
 eval $cmd
