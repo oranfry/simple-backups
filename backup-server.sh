@@ -4,8 +4,9 @@ gzip_ext=
 save_space=
 parent_dir=backup
 backup_owner=root
+invalid=
 
-while getopts ":o:p:z" opt; do
+while getopts ":o:p:zs" opt; do
   case ${opt} in
     o )
       backup_owner=$OPTARG
@@ -22,9 +23,11 @@ while getopts ":o:p:z" opt; do
       ;;
     \? )
       echo "Invalid option: $OPTARG" 1>&2
+      invalid=1
       ;;
     : )
       echo "Invalid option: $OPTARG requires an argument" 1>&2
+      invalid=1
       ;;
   esac
 done
@@ -35,6 +38,10 @@ host=$1
 if [ "${host}" == "" ]; then
     echo no host given
     exit
+fi
+
+if [ -n "${invalid}" ]; then
+  exit
 fi
 
 CLONE_HOME="/root/.clone/${host}"
@@ -68,7 +75,7 @@ includes=$(cat "${TAR_HOME}/files.list" | while read f; do while [ "$f" != "/" ]
 cmd="/usr/bin/rsync --rsync-path='sudo rsync' -az --delete $includes '--exclude=*' ${host}:/ '${CLONE_HOME}'"
 eval $cmd
 
-rm "${TAR_HOME}/backup.tar${gzip_ext}" # frees up space for the new archive
+rm -f "${TAR_HOME}/backup.tar${gzip_ext}" # frees up space for the new archive
 
 (cd "${CLONE_HOME}" && /bin/tar -cf${gzip_flag} "/tmp/${host}.tar" * && chown $backup_owner:$backup_owner "/tmp/${host}.tar" && mv "/tmp/${host}.tar" "${TAR_HOME}/backup.tar${gzip_ext}")
 
