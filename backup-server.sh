@@ -55,7 +55,10 @@ CLONE_HOME="/root/.clone/${host}"
 TAR_HOME="$(eval echo ~$backup_owner)/${parent_dir}/${host}"
 TAR_FILE="${TAR_HOME}/backup.tar${gzip_ext}"
 
-test -n "$verbose" && echo -e "CLONE_HOME: $CLONE_HOME\nTAR_HOME: $TAR_HOME\nTAR_FILE: $TAR_FILE\n"
+test -n "$verbose" && echo -e "CLONE_HOME: $CLONE_HOME"
+test -n "$verbose" && echo -e "TAR_HOME:   $TAR_HOME"
+test -n "$verbose" && echo -e "TAR_FILE:   $TAR_FILE"
+test -n "$verbose" && echo
 
 if [ -e "${TAR_HOME}/processing" ]; then
 	echo "Cowardly refusing to run two backup processes at the same time" 1>&2
