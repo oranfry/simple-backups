@@ -103,7 +103,7 @@ rm -f "${TAR_FILE}" # frees up space for the new archive
 
 TAR_FILE_TMP="/tmp/${host}.tar${gzip_ext}"
 test -n "$verbose" && echo -e "Creating new backup...\n"
-(/bin/tar -C "${CLONE_HOME}" $tar_opts -c${gzip_flag}f "${TAR_FILE_TMP}" * && chown $backup_owner:$backup_owner "${TAR_FILE_TMP}" && mv "${TAR_FILE_TMP}" "${TAR_FILE}")
+(/bin/tar -C "${CLONE_HOME}" $tar_opts -c${gzip_flag}f "${TAR_FILE_TMP}" . && chown $backup_owner:$backup_owner "${TAR_FILE_TMP}" && mv "${TAR_FILE_TMP}" "${TAR_FILE}")
 
 if [ -n "${save_space}" -a -s "${TAR_FILE}" ]; then
   test -n "$verbose" && echo -e "Clearing cache...\n"
