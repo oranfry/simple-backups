@@ -13,7 +13,7 @@ Generally the tool must be run as root, because it works on files that could be 
 
 To use the tool, set up at least one server, then run `backup-server myserver`.
 
-Create the top-level backup folder (default /root/backup) and, within this, on folder for each server you want to back up. Name these server folders after the fully qualified hostnames of each server:
+Create the top-level backup folder (default `/root/backup`) and, within this, one folder for each server you want to back up. Name these server folders after the fully qualified hostnames of each server:
 
 Each server folder needs a file called `files.list` listing all the patterns to be backed up.
 
@@ -57,9 +57,10 @@ Backups will be placed next to the corresponding `files.list`, like so:
 
 ```
 backup-server
-  -o OWNER        If set, the owner of the backup tar file will be changed to OWNER after creation, and the parent directory will be relative to OWNER's home folder
-  -p PARENT_DIR   Set the parent directory for backup config and tar files (default: /root/backup)
-  -z              If present, gzip the backup tar (filename will be backup.tar.gz)
-  -s              Make an effort to save space on disk, at the cost of bandwidth and performance
-  -v              If present, be noisy about what's going on
+
+  -o OWNER          Specifies which user the backup tar file will owned by after creation (default: root)
+  -p PARENT_DIR     The parent directory for backup config and tar files, relative to owner's home directory (default: backup)
+  -z                If present, gzip the backup tar (filename will be backup.tar.gz)
+  -s                If present, make an effort to save space on disk, at the cost of bandwidth and performance
+  -v                If present, be noisy about what's going on
 ```
