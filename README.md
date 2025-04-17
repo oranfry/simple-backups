@@ -52,7 +52,7 @@ Backups will be placed next to the corresponding `files.list`, like so:
 
 ```
 backup-server
-  -o OWNER        If set, the owner of the backup tar file will be changed to OWNER after creation
+  -o OWNER        If set, the owner of the backup tar file will be changed to OWNER after creation, and the parent directory will be relative to OWNER's home folder
   -p PARENT_DIR   Set the parent directory for backup config and tar files (default: /root/backup)
   -z              If present, gzip the backup tar (filename will be backup.tar.gz)
   -s              Make an effort to save space on disk, at the cost of bandwidth and performance
