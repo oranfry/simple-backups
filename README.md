@@ -15,14 +15,16 @@ To use the tool, set up at least one server, then run `backup-server myserver`.
 
 Create the top-level backup folder (default /root/backup) and, within this, on folder for each server you want to back up. Name these server folders after the fully qualified hostnames of each server:
 
-Each server folder needs a file called `files.list` listing all the patterns to be backed up
+Each server folder needs a file called `files.list` listing all the patterns to be backed up.
 
+```
 /root
     /backup
         /example1.com
             /files.list
         /example2.com
             /files.list
+```
 
 Example `files.list`:
 
@@ -39,6 +41,8 @@ Make sure you have ssh (rsync) access to the server you want to back up on the r
 Now that you have your servers configured, you can run `backup-server example1.com` or similar to back up. Repeat as needed - the archive will be replaced by the latest backup.
 
 Backups will be placed next to the corresponding `files.list`, like so:
+
+```
 /root
     /backup
         /example1.com
@@ -47,6 +51,7 @@ Backups will be placed next to the corresponding `files.list`, like so:
         /example2.com
             /files.list
             /backup.tar
+```
 
 ## Options
 
